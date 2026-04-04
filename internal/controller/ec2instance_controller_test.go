@@ -30,7 +30,7 @@ import (
 	computev1 "github.com/divakaivan/operator-repo/api/v1"
 )
 
-var _ = Describe("EC2instance Controller", func() {
+var _ = Describe("EC2Instance Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
 
@@ -40,13 +40,13 @@ var _ = Describe("EC2instance Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		ec2instance := &computev1.EC2instance{}
+		ec2instance := &computev1.EC2Instance{}
 
 		BeforeEach(func() {
-			By("creating the custom resource for the Kind EC2instance")
+			By("creating the custom resource for the Kind EC2Instance")
 			err := k8sClient.Get(ctx, typeNamespacedName, ec2instance)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &computev1.EC2instance{
+				resource := &computev1.EC2Instance{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -59,16 +59,16 @@ var _ = Describe("EC2instance Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &computev1.EC2instance{}
+			resource := &computev1.EC2Instance{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 
-			By("Cleanup the specific resource instance EC2instance")
+			By("Cleanup the specific resource instance EC2Instance")
 			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
 		})
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &EC2instanceReconciler{
+			controllerReconciler := &EC2InstanceReconciler{
 				Client: k8sClient,
 				Scheme: k8sClient.Scheme(),
 			}

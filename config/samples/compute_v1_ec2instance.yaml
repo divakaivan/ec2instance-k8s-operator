@@ -1,5 +1,5 @@
 apiVersion: compute.cloud.com/v1
-kind: EC2instance
+kind: EC2Instance
 metadata:
   labels:
     app.kubernetes.io/name: k8s-operator

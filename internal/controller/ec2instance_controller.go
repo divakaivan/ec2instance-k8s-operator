@@ -27,8 +27,8 @@ import (
 	computev1 "github.com/divakaivan/operator-repo/api/v1"
 )
 
-// EC2instanceReconciler reconciles a EC2instance object
-type EC2instanceReconciler struct {
+// EC2InstanceReconciler reconciles a EC2Instance object
+type EC2InstanceReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
@@ -40,13 +40,13 @@ type EC2instanceReconciler struct {
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 // TODO(user): Modify the Reconcile function to compare the state specified by
-// the EC2instance object against the actual cluster state, and then
+// the EC2Instance object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.23.3/pkg/reconcile
-func (r *EC2instanceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *EC2InstanceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = logf.FromContext(ctx)
 
 	// TODO(user): your logic here
@@ -55,9 +55,9 @@ func (r *EC2instanceReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *EC2instanceReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *EC2InstanceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&computev1.EC2instance{}).
+		For(&computev1.EC2Instance{}).
 		Named("ec2instance").
 		Complete(r)
 }

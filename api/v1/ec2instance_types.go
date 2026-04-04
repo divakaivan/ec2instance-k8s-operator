@@ -23,29 +23,36 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// EC2instanceSpec defines the desired state of EC2instance
-type EC2instanceSpec struct {
+// EC2InstanceSpec defines the desired state of EC2Instance
+type EC2InstanceSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 	// The following markers will use OpenAPI v3 schema to validate the value
 	// More info: https://book.kubebuilder.io/reference/markers/crd-validation.html
 
-	// foo is an example field of EC2instance. Edit ec2instance_types.go to remove/update
-	// +optional
-	AmiID string `json:"amiID,omitempty"`
-	SshKey string `json:"sshKey,omitempty"`
-	Type string `json:"type,omitempty"`
+	AmiID             string            `json:"amiId"`
+	SshKey            string            `json:"sshKey"`
+	InstanceType      string            `json:"instanceType"`
+	Subnet            string            `json:"subnet"`
+	Tags              map[string]string `json:"tags,omitempty"`
+	Storage           StorageConfig     `json:"storage"`
+	AdditionalStorage []StorageConfig   `json:"additionalStorage,omitempty"`
 }
 
-// EC2instanceStatus defines the observed state of EC2instance.
-type EC2instanceStatus struct {
+type StorageConfig struct {
+	Size int    `json:"size"`
+	Type string `json:"type"`
+}
+
+// EC2InstanceStatus defines the observed state of EC2Instance.
+type EC2InstanceStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// For Kubernetes API conventions, see:
 	// https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#typical-status-properties
 
-	// conditions represent the current state of the EC2instance resource.
+	// conditions represent the current state of the EC2Instance resource.
 	// Each condition has a unique type and reflects the status of a specific aspect of the resource.
 	//
 	// Standard condition types include:
@@ -54,41 +61,40 @@ type EC2instanceStatus struct {
 	// - "Degraded": the resource failed to reach or maintain its desired state
 	//
 	// The status of each condition is one of True, False, or Unknown.
-	// +listType=map
-	// +listMapKey=type
-	// +optional
-	Conditions []metav1.Condition `json:"conditions,omitempty"`
+	Phase      string `json:"phase,omitempty"`
+	InstanceID string `json:"instanceID,omitempty"`
+	PublicIP   string `json:"publicIP,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
-// EC2instance is the Schema for the ec2instances API
-type EC2instance struct {
+// EC2Instance is the Schema for the ec2instances API
+type EC2Instance struct {
 	metav1.TypeMeta `json:",inline"`
 
 	// metadata is a standard object metadata
 	// +optional
-	metav1.ObjectMeta `json:"metadata,omitzero"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	// spec defines the desired state of EC2instance
+	// spec defines the desired state of EC2Instance
 	// +required
-	Spec EC2instanceSpec `json:"spec"`
+	Spec EC2InstanceSpec `json:"spec"`
 
-	// status defines the observed state of EC2instance
+	// status defines the observed state of EC2Instance
 	// +optional
-	Status EC2instanceStatus `json:"status,omitzero"`
+	Status EC2InstanceStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// EC2instanceList contains a list of EC2instance
-type EC2instanceList struct {
+// EC2InstanceList contains a list of EC2Instance
+type EC2InstanceList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitzero"`
-	Items           []EC2instance `json:"items"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []EC2Instance `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&EC2instance{}, &EC2instanceList{})
+	SchemeBuilder.Register(&EC2Instance{}, &EC2InstanceList{})
 }

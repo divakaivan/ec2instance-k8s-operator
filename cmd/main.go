@@ -46,6 +46,7 @@ var (
 )
 
 func init() {
+	// scheme (empty book) > AddToScheme(built-in types/k8s types) > AddToScheme(custom types/ec2instance) > complete registry(full catalog)
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
 	utilruntime.Must(computev1.AddToScheme(scheme))
@@ -178,11 +179,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := (&controller.EC2instanceReconciler{
+	if err := (&controller.EC2InstanceReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "Failed to create controller", "controller", "EC2instance")
+		setupLog.Error(err, "Failed to create controller", "controller", "EC2Instance")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder
