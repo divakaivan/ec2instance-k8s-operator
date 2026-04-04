@@ -53,6 +53,8 @@ spec:
                 type: array
               amiId:
                 type: string
+              instanceName:
+                type: string
               instanceType:
                 type: string
               sshKey:
@@ -75,6 +77,7 @@ spec:
                 type: object
             required:
             - amiId
+            - instanceName
             - instanceType
             - sshKey
             - storage
