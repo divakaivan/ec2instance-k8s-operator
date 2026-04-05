@@ -2,7 +2,7 @@ apiVersion: compute.cloud.com/v1
 kind: EC2Instance
 metadata:
   labels:
-    app.kubernetes.io/name: k8s-operator
+    app.kubernetes.io/name: ec2instance-k8s-operator
     app.kubernetes.io/managed-by: kustomize
   name: ec2instance-sample
 spec:

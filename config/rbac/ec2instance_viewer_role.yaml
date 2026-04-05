@@ -9,7 +9,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: k8s-operator
+    app.kubernetes.io/name: ec2instance-k8s-operator
     app.kubernetes.io/managed-by: kustomize
   name: ec2instance-viewer-role
 rules:
