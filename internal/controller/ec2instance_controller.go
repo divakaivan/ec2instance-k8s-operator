@@ -64,7 +64,7 @@ func (r *EC2InstanceReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 		return ctrl.Result{}, err
 	}
 
-	// check if deleteionTimestamp is not zero
+	// check if DeletionTimestamp is not zero
 	if !ec2Instance.DeletionTimestamp.IsZero() {
 		l.Info("Instance is being deleted")
 		_, err := deleteEc2Instance(ctx, ec2Instance)

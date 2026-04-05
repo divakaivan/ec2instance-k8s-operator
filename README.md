@@ -1,16 +1,49 @@
-# k8s-operator
-// TODO(user): Add simple overview of use/purpose
+# EC2Instance Operator
+
+A Kubernetes operator that manages the lifecycle of AWS EC2 instances as native Kubernetes resources. Define, create, and delete EC2 instances using standard `kubectl` commands — no AWS console or CLI required.
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+
+The operator introduces a custom resource called **EC2Instance**. When you apply an `EC2Instance` manifest to your cluster, the operator:
+
+1. Calls the AWS EC2 API to launch an instance with the requested configuration (AMI, instance type, key pair, subnet, etc.)
+2. Waits for the instance to reach a running state
+3. Writes the instance details (ID, public/private IP, DNS names, state) back to the resource's `status`
+4. Adds a finalizer to ensure the EC2 instance is terminated before the Kubernetes resource is deleted
+
+When you delete the `EC2Instance` resource, the operator terminates the corresponding AWS EC2 instance and removes the finalizer, keeping your AWS environment clean.
+
+### Example
+
+```yaml
+apiVersion: compute.cloud.com/v1
+kind: EC2Instance
+metadata:
+  name: my-instance
+  namespace: default
+spec:
+  instanceType: t3.micro
+  amiId: ami-0c02fb55956c7d316
+  region: us-east-1
+  keyPair: my-key-pair
+  subnet: subnet-0123456789abcdef0
+```
+
+Apply it, then watch the status populate with the instance ID, IP addresses, and state:
+
+```sh
+kubectl apply -f my-instance.yaml
+kubectl get ec2instances -w
+```
 
 ## Getting Started
 
 ### Prerequisites
 - go version v1.24.6+
-- docker version 17.03+.
-- kubectl version v1.11.3+.
-- Access to a Kubernetes v1.11.3+ cluster.
+- docker version 17.03+
+- kubectl version v1.11.3+
+- Access to a Kubernetes v1.11.3+ cluster
+- AWS credentials (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`) with EC2 permissions
 
 ### To Deploy on the cluster
 **Build and push your image to the location specified by `IMG`:**
@@ -94,21 +127,38 @@ kubectl apply -f https://raw.githubusercontent.com/<org>/k8s-operator/<tag or br
 
 ### By providing a Helm Chart
 
-1. Build the chart using the optional helm plugin
+The Helm chart is pre-generated under `dist/chart` and uses the image `divakaivan/k8s-operator:latest` from DockerHub.
+
+Install it with:
+
+```sh
+helm install ec2-operator ./dist/chart \
+  --namespace ec2-operator-system \
+  --create-namespace \
+  --set manager.env[0].name=AWS_ACCESS_KEY_ID \
+  --set manager.env[0].value=<your-access-key-id> \
+  --set manager.env[1].name=AWS_SECRET_ACCESS_KEY \
+  --set manager.env[1].value=<your-secret-access-key>
+```
+
+**NOTE:** If you change the project, regenerate the chart by re-running:
 
 ```sh
 kubebuilder edit --plugins=helm/v2-alpha
 ```
 
-2. See that a chart was generated under 'dist/chart', and users
-can obtain this solution from there.
+If you have webhooks or custom `values.yaml` changes, use `--force` and re-apply your customisations afterwards.
 
-**NOTE:** If you change the project, you need to update the Helm Chart
-using the same command above to sync the latest changes. Furthermore,
-if you create webhooks, you need to use the above command with
-the '--force' flag and manually ensure that any custom configuration
-previously added to 'dist/chart/values.yaml' or 'dist/chart/manager/manager.yaml'
-is manually re-applied afterwards.
+## CI/CD
+
+On every push to `main`, the [Publish workflow](.github/workflows/publish.yml) builds the operator image and pushes it to DockerHub as `divakaivan/k8s-operator:latest`. The Helm chart's `values.yaml` is pre-configured to pull this image.
+
+To enable the workflow, add the following secrets to your GitHub repository:
+
+| Secret | Description |
+|--------|-------------|
+| `DOCKERHUB_USERNAME` | Your DockerHub username |
+| `DOCKERHUB_TOKEN` | A DockerHub access token |
 
 ## Contributing
 // TODO(user): Add detailed information on how you would like others to contribute to this project
