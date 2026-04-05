@@ -91,10 +91,6 @@ jobs:
       - name: Regenerate dist/install.yaml with correct image
         run: make build-installer IMG=timee98642/ec2instance-k8s-operator:latest
 
-      - name: Update chart values.yaml with correct image
-        run: |
-          sed -i 's|repository:.*ec2instance-k8s-operator|repository: timee98642/ec2instance-k8s-operator|' dist/chart/values.yaml
-
       - name: Commit updated dist/install.yaml and chart values
         run: |
           git config user.name "${{ github.actor }}"
