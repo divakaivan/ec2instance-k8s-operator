@@ -79,15 +79,8 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          platforms: linux/amd64,linux/arm64
-          tags: timee98642/ec2instance-k8s-operator:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Build and push image for all platforms
+        run: make docker-buildx IMG=timee98642/ec2instance-k8s-operator:latest
           
   publish-chart:
     name: Publish Helm chart to GitHub Pages
