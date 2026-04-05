@@ -127,7 +127,7 @@ kubectl apply -f https://raw.githubusercontent.com/<org>/k8s-operator/<tag or br
 
 ### By providing a Helm Chart
 
-The Helm chart is pre-generated under `dist/chart` and uses the image `divakaivan/k8s-operator:latest` from DockerHub.
+The Helm chart is pre-generated under `dist/chart` and uses the image `divakaivan/ec2instance-k8s-operator:latest` from DockerHub.
 
 Install it with:
 
@@ -151,7 +151,7 @@ If you have webhooks or custom `values.yaml` changes, use `--force` and re-apply
 
 ## CI/CD
 
-On every push to `main`, the [Publish workflow](.github/workflows/publish.yml) builds the operator image and pushes it to DockerHub as `divakaivan/k8s-operator:latest`. The Helm chart's `values.yaml` is pre-configured to pull this image.
+On every push to `main`, the [Publish workflow](.github/workflows/publish.yml) builds the operator image and pushes it to DockerHub as `divakaivan/ec2instance-k8s-operator:latest`. The Helm chart's `values.yaml` is pre-configured to pull this image.
 
 To enable the workflow, add the following secrets to your GitHub repository:
 

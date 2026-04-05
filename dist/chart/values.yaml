@@ -12,9 +12,9 @@ manager:
   replicas: 1
 
   image:
-    repository: divakaivan/k8s-operator
+    repository: divakaivan/ec2instance-k8s-operator
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
 
   ## Arguments
   ##
