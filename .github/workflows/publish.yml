@@ -50,6 +50,6 @@ jobs:
         uses: helm/chart-releaser-action@v1.6.0
         with:
           charts_dir: dist
+          charts_repo_url: "https://divakaivan.github.io/ec2instance-k8s-operator"
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          tags: timee98642/ec2instance-k8s-operator:latest
