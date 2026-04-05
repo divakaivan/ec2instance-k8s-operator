@@ -1,0 +1,19 @@
+name: Test Chart
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the code
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        run: make install-helm
+
+      - name: Lint Helm Chart
+        run: helm lint ./dist/chart
