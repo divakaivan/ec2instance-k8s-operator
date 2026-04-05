@@ -10,7 +10,7 @@ plugins:
   helm.kubebuilder.io/v2-alpha:
     manifests: dist/install.yaml
     output: dist
-projectName: k8s-operator
+projectName: ec2instance-k8s-operator
 repo: github.com/divakaivan/operator-repo
 resources:
 - api:
